@@ -218,9 +218,9 @@ class Mods
     {
         $validMods = $this->mods[$rulesetId] ?? null;
 
-        if ($validMods === null) {
-            throw new InvariantException('invalid ruleset');
-        }
+        // if ($validMods === null) {
+        //     throw new InvariantException('invalid ruleset');
+        // }
 
         $checkedIds = new Set();
         foreach ($ids as $id) {
