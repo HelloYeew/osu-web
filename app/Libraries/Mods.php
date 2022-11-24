@@ -216,23 +216,23 @@ class Mods
 
     public function validateSelection(int $rulesetId, array $ids): bool
     {
-        $validMods = $this->mods[$rulesetId] ?? null;
+        // $validMods = $this->mods[$rulesetId] ?? null;
 
         // if ($validMods === null) {
         //     throw new InvariantException('invalid ruleset');
         // }
 
-        $checkedIds = new Set();
-        foreach ($ids as $id) {
-            if (!isset($validMods[$id])) {
-                throw new InvariantException("invalid mod for ruleset: {$id}");
-            }
+        // $checkedIds = new Set();
+        // foreach ($ids as $id) {
+        //    if (!isset($validMods[$id])) {
+        //        throw new InvariantException("invalid mod for ruleset: {$id}");
+        //    }
 
-            if ($checkedIds->contains($id)) {
-                throw new InvariantException("duplicate mod for ruleset: {$id}");
-            }
-            $checkedIds->add($id);
-        }
+        //    if ($checkedIds->contains($id)) {
+        //        throw new InvariantException("duplicate mod for ruleset: {$id}");
+        //    }
+        //    $checkedIds->add($id);
+        // }
 
         return true;
     }
