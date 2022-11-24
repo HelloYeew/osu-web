@@ -4,8 +4,8 @@ x-env: &x-env
   BEATMAPS_DIFFICULTY_CACHE_SERVER_URL: http://beatmap-difficulty-lookup-cache:5000
   BROADCAST_DRIVER: redis
   CACHE_DRIVER: redis
-  DB_CONNECTION_STRING: Server=db;Database=osu;Uid=osuweb;
-  DB_HOST: db
+  DB_CONNECTION_STRING: Server=167.172.228.121;Database=osu;Uid=web;
+  DB_HOST: 167.172.228.121
   ES_HOST: http://elasticsearch:9200
   ES_SCORES_HOST: http://elasticsearch:9200
   ES_SOLO_SCORES_HOST: http://elasticsearch:9200
@@ -59,6 +59,8 @@ services:
     volumes:
       - .env:/app/.env
       - ./storage/oauth-public.key:/app/oauth-public.key
+    ports:
+      - "2345:2345"
     environment:
       <<: *x-env
 
@@ -70,6 +72,8 @@ services:
     volumes:
       - .env.dusk.local:/app/.env
       - ./storage/oauth-public.key:/app/oauth-public.key
+    ports:
+      - "2346:2345"
     environment:
       <<: *x-env
 
