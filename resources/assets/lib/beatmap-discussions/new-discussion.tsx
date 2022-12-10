@@ -1,7 +1,7 @@
 // Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the GNU Affero General Public License v3.0.
 // See the LICENCE file in the repository root for full licence text.
 
-import { DiscussionType, discussionTypeIcons } from 'beatmap-discussions/discussion-type';
+import { DiscussionType, discussionTypeIcons, discussionTypes } from 'beatmap-discussions/discussion-type';
 import BigButton from 'components/big-button';
 import StringWithComponent from 'components/string-with-component';
 import TimeWithTooltip from 'components/time-with-tooltip';
@@ -23,10 +23,9 @@ import { canModeratePosts, formatTimestamp, NearbyDiscussion, nearbyDiscussions,
 import { nominationsCount } from 'utils/beatmapset-helper';
 import { classWithModifiers } from 'utils/css';
 import { InputEventType, makeTextAreaHandler } from 'utils/input-handler';
-import { trans, transArray } from 'utils/lang';
+import { joinComponents, trans } from 'utils/lang';
 import { hideLoadingOverlay, showLoadingOverlay } from 'utils/loading-overlay';
 import { present } from 'utils/string';
-import { linkHtml } from 'utils/url';
 import MessageLengthCounter from './message-length-counter';
 
 const bn = 'beatmap-discussion-new';
@@ -215,10 +214,8 @@ export class NewDiscussion extends React.Component<Props> {
 
   @action
   private readonly post = (e: React.SyntheticEvent<HTMLElement>) => {
-    if (!this.validPost || this.postXhr != null) return;
-
     const type = e.currentTarget.dataset.type;
-    if (type == null) return;
+    if (type == null || !this.validPost(type) || this.postXhr != null) return;
 
     if (type === 'problem') {
       const problemType = this.problemType();
@@ -378,26 +375,23 @@ export class NewDiscussion extends React.Component<Props> {
     if (this.nearbyDiscussions.length === 0) return;
     const currentTimestamp = this.timestamp != null ? formatTimestamp(this.timestamp) : '';
     const timestamps = this.nearbyDiscussions.map((discussion) => (
-      linkHtml(
-        BeatmapDiscussionHelper.url({ discussion }),
-        formatTimestamp(discussion.timestamp) ?? '',
-        { classNames: ['js-beatmap-discussion--jump'] },
-      )
+      <a
+        key={discussion.id}
+        className='js-beatmap-discussion--jump'
+        href={BeatmapDiscussionHelper.url({ discussion })}
+      >
+        {formatTimestamp(discussion.timestamp)}
+      </a>
     ));
-
-    const timestampsString = transArray(timestamps);
 
     return (
       <div className={`${bn}__notice`}>
-        <div
-          className={`${bn}__notice-text`}
-          dangerouslySetInnerHTML={{
-            __html: trans('beatmap_discussions.nearby_posts.notice', {
-              existing_timestamps: timestampsString,
-              timestamp: currentTimestamp,
-            }),
-          }}
-        />
+        <div className={`${bn}__notice-text`}>
+          <StringWithComponent
+            mappings={{ existing_timestamps: joinComponents(timestamps), timestamp: currentTimestamp }}
+            pattern={trans('beatmap_discussions.nearby_posts.notice')}
+          />
+        </div>
 
         <label className={`${bn}__notice-checkbox`}>
           <div className='osu-switch-v2'>
@@ -500,7 +494,8 @@ export class NewDiscussion extends React.Component<Props> {
     this.timestampConfirmed = !this.timestampConfirmed;
   };
 
-  private validPost(type: DiscussionType) {
+  private validPost(type: string): type is DiscussionType {
+    if (!(discussionTypes as Readonly<string[]>).includes(type)) return false;
     if (!validMessageLength(this.message, this.isTimeline)) return false;
     if (!this.isTimeline) return true;
 
