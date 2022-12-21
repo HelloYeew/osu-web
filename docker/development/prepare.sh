@@ -66,4 +66,4 @@ if [ ! -f .docker/.my.cnf ]; then
     cp .docker/.my.cnf.example .docker/.my.cnf
 fi
 
-echo "Preparation completed. Adjust .env file if needed and run 'docker-compose up' followed by running migration."
+echo "Preparation completed. Adjust .env file if needed and run 'docker compose up' followed by running migration."
