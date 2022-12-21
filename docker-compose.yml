@@ -106,6 +106,7 @@ services:
 
   redis:
     image: redis:latest
+    restart: always
     ports:
       - "${REDIS_EXTERNAL_PORT:-6379}:6379"
     healthcheck:

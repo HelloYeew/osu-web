@@ -383,16 +383,17 @@ class Beatmapset extends Model implements AfterCommit, Commentable, Indexable, T
 
     public function coverURL($coverSize = 'cover', $customTimestamp = null)
     {
-        $timestamp = $customTimestamp ?? $this->defaultCoverTimestamp();
+	$timestamp = $customTimestamp ?? $this->defaultCoverTimestamp();
+	$id = $this->getKey() ?? 0;
 
-        return $this->storage()->url($this->coverPath()."{$coverSize}.jpg?{$timestamp}");
+        return $this->storage()->url($this->coverPath()."{$id}.jpg");
     }
 
     public function coverPath()
     {
         $id = $this->getKey() ?? 0;
 
-        return "beatmaps/{$id}/covers/";
+        return "cover/";
     }
 
     public function storeCover($target_filename, $source_path)
