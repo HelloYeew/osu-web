@@ -183,11 +183,13 @@ class Mods
         foreach ($settings as $key => $value) {
             $type = $this->mods[$rulesetId][$id]['Settings'][$key]['Type'] ?? null;
 
-            if ($type === null) {
-                throw new InvariantException("unknown setting for {$id} ({$key})");
-            } else {
-                $cleanSettings[$key] = get_param_value($value, $type);
-            }
+            // if ($type === null) {
+            //     throw new InvariantException("unknown setting for {$id} ({$key})");
+            // } else {
+            //     $cleanSettings[$key] = get_param_value($value, $type);
+            // }
+
+            $cleanSettings[$key] = get_param_value($value, $type);
         }
 
         return (object) $cleanSettings;
