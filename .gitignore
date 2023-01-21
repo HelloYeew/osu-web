@@ -68,7 +68,7 @@ com_crashlytics_export_strings.xml
 
 sftp-settings.json
 
-/resources/assets/build/
+/resources/builds/
 
 composer-installer
 
@@ -81,3 +81,6 @@ composer-installer
 /bootstrap/cache/
 /storage/htmlpurifier/
 /storage/paypal_auth.cache
+
+/database/ip2asn.idx
+/database/ip2asn.tsv
